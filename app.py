@@ -14,12 +14,12 @@ print('\n')
 def check_for_new_staff():
     # open up google sheet to see if new staff have been added
     gc = pygsheets.authorize(outh_file='client_secret.json')
-    workbook = gc.open_by_key('1lRbvNLr4EJQ8pQco7MRooxF4ompKEAdCFehlaZRCYOY')
-    wks = workbook.worksheet_by_title("NewStaff")
+    initial_form_wb = gc.open_by_key('1lRbvNLr4EJQ8pQco7MRooxF4ompKEAdCFehlaZRCYOY')
+    initial_form_sheet = initial_form_wb.worksheet_by_title("NewStaff")
 
 
     # download all data from sheet as cell_matrix
-    cell_matrix = wks.get_all_values(returnas='matrix')
+    cell_matrix = initial_form_sheet.get_all_values(returnas='matrix')
     # print(cell_matrix)
 
     # gather 'keys' for new dict from 1st row in sheet
@@ -37,11 +37,16 @@ def check_for_new_staff():
             worksheet_data.append(line_dict)
          
     
-    return worksheet_data
-
-worksheet_data = check_for_new_staff()
+    return worksheet_data, initial_form_sheet
 
 
+
+
+
+# check for new staff
+worksheet_data, initial_form_sheet = check_for_new_staff()
+
+# if new staff
 if len(worksheet_data) == 0: 
     print ("The list is Empty") 
 else: 
