@@ -24,6 +24,7 @@ MasterList = workbook.worksheet_by_title("MasterList")
 
 # grab info from the master list
 master_list_matrix_raw = MasterList.get_all_values(returnas='matrix')
+# remove blank rows
 master_list_matrix = [x for x in master_list_matrix_raw if x[0] != '']
 
 
@@ -45,39 +46,100 @@ for count, row in enumerate(master_list_matrix):
 pprint(master_list_data)
 
 # initialize final strings
-bonnie_todo = ''
-jeri_todo = ''
-pierrette_todo = ''
-michelle_todo = ''
+final_bonnie_todo = ''
+final_jeri_todo = ''
+final_pierrette_todo = ''
+final_michelle_todo = ''
 
 
 
-# # begin loop loooing for incomplete staff members
-# for staff in master_list_data:
-#     if master_list_data[staff]['Status'] == 'Not Complete':
-#         # print(master_list_data[staff]['Staff Name'])
-#         this_staff_sheet = workbook.worksheet_by_title(master_list_data[staff]['Staff Name'])
-#         this_staff_matrix = this_staff_sheet.get_all_values(returnas='matrix')
+# begin loop loooing for incomplete staff members
+for staff in master_list_data:
+    if staff['Status'] == 'Not Complete':
+        # print(master_list_data[staff]['Staff Name'])
+        this_staff_sheet = workbook.worksheet_by_title(staff['Staff Name'])
+        # this_staff_matrix = this_staff_sheet.get_all_values(returnas='matrix')
 
-#         counter = 1
-#         this_staff_data = {}
-#         new_line = {}
+        # begin bonnie email notifications
+        bonnie_range = this_staff_sheet.range('A12:B16')
+        bonnie_todo = ''
+        
+        for count, line in enumerate(bonnie_range):
+            # print(this_staff_data[number])
+            if bonnie_range[count][0].value == '':
+                bonnie_todo = bonnie_todo + bonnie_range[count][1].value + '\n'
+        if bonnie_todo != '':
+            final_bonnie_todo = final_bonnie_todo + staff['Staff Name'] + '\n \n' + bonnie_todo + '\n\n'
 
-#         for line in this_staff_matrix:
-#             this_line_data = {}
-#             # this_line_data['row'] = counter
-#             this_line_data['a'] = line[0]
-#             this_line_data['b'] = line[1]
-#             this_staff_data[counter] = this_line_data
-#             counter = counter + 1
-#         # pprint(this_staff_data)
+        # begin jeri email notifications
+        jeri_range = this_staff_sheet.range('A21:B25')
+        jeri_todo = ''
+        
+        for count, line in enumerate(jeri_range):
+            # print(this_staff_data[number])
+            if jeri_range[count][0].value == '':
+                jeri_todo = jeri_todo + jeri_range[count][1].value + '\n'
+        if jeri_todo != '':
+            final_jeri_todo = final_jeri_todo + staff['Staff Name'] + '\n \n' + jeri_todo + '\n\n'
 
-#         # begin admin email notifications
-#         admin_list = [12,13,14,15,16,17,18,19,20]
-#         admin_todo = ''
-#         for number in admin_list:
-#             # print(this_staff_data[number])
-#             if this_staff_data[number]['a'] == '':
-#                 admin_todo = admin_todo + this_staff_data[number]['b'] + '\n'
-#         if admin_todo != '':
-#             final_admin_todo = final_admin_todo + master_list_data[staff]['Staff Name'] + '\n \n' + admin_todo + '\n\n'
+        # begin pierrette email notifications
+        pierrette_range = this_staff_sheet.range('A30:B31')
+        pierrette_todo = ''
+        
+        for count, line in enumerate(pierrette_range):
+            # print(this_staff_data[number])
+            if pierrette_range[count][0].value == '':
+                pierrette_todo = pierrette_todo + pierrette_range[count][1].value + '\n'
+        if pierrette_todo != '':
+            final_pierrette_todo = final_pierrette_todo + staff['Staff Name'] + '\n \n' + pierrette_todo + '\n\n'
+
+
+        # begin michelle email notifications
+        michelle_range = this_staff_sheet.range('A36:B42')
+        michelle_todo = ''
+        
+        for count, line in enumerate(michelle_range):
+            # print(this_staff_data[number])
+            if michelle_range[count][0].value == '':
+                michelle_todo = michelle_todo + michelle_range[count][1].value + '\n'
+        if michelle_todo != '':
+            final_michelle_todo = final_michelle_todo + staff['Staff Name'] + '\n \n' + michelle_todo + '\n\n'
+
+
+contents = 'This is your friendly weekly reminder of things to do for new staff members. \n \n \n'
+contents2 = 'Due to your efficiency, there is actually nothing for you to do for new hires!'
+html = '<a href="https://docs.google.com/spreadsheets/d/1KWLOYV7wQjEaD0A107gZlivZ3sr8OeOcDP3OjVOSX6E/edit#gid=0">New Staff Process spreadsheet</a>'
+
+
+# bonnie emails
+if final_bonnie_todo != '':
+    yag.send(['bonnie.moulton@mvsdschools.org','russell.gregory@mvsdschools.org'], 'New Staff Weekly Reminder', [contents, final_bonnie_todo, html])
+else:
+    yag.send('bonnie.moulton@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+print('bonnie email sent')
+
+# # jeri emails
+# if final_jeri_todo != '':
+#     yag.send('Jeri.Patterson@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_jeri_todo, html])
+# else:
+#     yag.send('Jeri.Patterson@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+# print('jeri email sent')
+
+# # pierrette emails
+# if final_pierrette_todo != '':
+#     yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_pierrette_todo, html])
+# else:
+#     yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+# print('pierrette email sent')
+
+# # michelle emails
+# if final_michelle_todo != '':
+#     yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_michelle_todo, html])
+# else:
+#     yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+# print('michelle email sent')
+
+
+
+
+print('\n\nfinished')

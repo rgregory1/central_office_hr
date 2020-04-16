@@ -128,7 +128,7 @@ else:
         print('finished with spreadsheet setup')
 
         # begin email notifications
-        contents = 'A new staff member, ' + staff_name + ', was added to the CO New Staff Process spreadsheet, go and check it out. \n\n'
+        contents = 'A new staff member, <b>' + staff_name + '</b>, was added to the CO New Staff Process spreadsheet, go and check it out. \n\n'
         html = '<a href="https://docs.google.com/spreadsheets/d/1KWLOYV7wQjEaD0A107gZlivZ3sr8OeOcDP3OjVOSX6E/edit#gid=0">New Staff Process spreadsheet</a>'
         yag.send(['russell.gregory@mvsdschools.org','bonnie.moulton@mvsdschools.org'], 'New Employee', [contents, html])
         print(f'sent notificaion email for {staff_name}\n\n')
