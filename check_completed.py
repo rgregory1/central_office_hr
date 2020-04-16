@@ -118,26 +118,26 @@ else:
     yag.send('bonnie.moulton@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
 print('bonnie email sent')
 
-# # jeri emails
-# if final_jeri_todo != '':
-#     yag.send('Jeri.Patterson@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_jeri_todo, html])
-# else:
-#     yag.send('Jeri.Patterson@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
-# print('jeri email sent')
+# jeri emails
+if final_jeri_todo != '':
+    yag.send('Jeri.Patterson@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_jeri_todo, html])
+else:
+    yag.send('Jeri.Patterson@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+print('jeri email sent')
 
-# # pierrette emails
-# if final_pierrette_todo != '':
-#     yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_pierrette_todo, html])
-# else:
-#     yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
-# print('pierrette email sent')
+# pierrette emails
+if final_pierrette_todo != '':
+    yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_pierrette_todo, html])
+else:
+    yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+print('pierrette email sent')
 
-# # michelle emails
-# if final_michelle_todo != '':
-#     yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_michelle_todo, html])
-# else:
-#     yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
-# print('michelle email sent')
+# michelle emails
+if final_michelle_todo != '':
+    yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_michelle_todo, html])
+else:
+    yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+print('michelle email sent')
 
 
 
