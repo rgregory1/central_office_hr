@@ -8,7 +8,7 @@ import datetime
 # setup gmail link
 gmail_user = credentials.gmail_user
 gmail_password = credentials.gmail_password
-yag = yagmail.SMTP( gmail_user, gmail_password)
+yag = yagmail.SMTP(gmail_user, gmail_password)
 
 
 # get timestamp for log
@@ -52,7 +52,6 @@ final_pierrette_todo = ''
 final_michelle_todo = ''
 
 
-
 # begin loop loooing for incomplete staff members
 for staff in master_list_data:
     if staff['Status'] == 'Not Complete':
@@ -63,47 +62,52 @@ for staff in master_list_data:
         # begin bonnie email notifications
         bonnie_range = this_staff_sheet.range('A12:B16')
         bonnie_todo = ''
-        
+
         for count, line in enumerate(bonnie_range):
             # print(this_staff_data[number])
             if bonnie_range[count][0].value == '':
                 bonnie_todo = bonnie_todo + bonnie_range[count][1].value + '\n'
         if bonnie_todo != '':
-            final_bonnie_todo = final_bonnie_todo + staff['Staff Name'] + '\n \n' + bonnie_todo + '\n\n'
+            final_bonnie_todo = final_bonnie_todo + \
+                staff['Staff Name'] + '\n \n' + bonnie_todo + '\n\n'
 
         # begin jeri email notifications
         jeri_range = this_staff_sheet.range('A21:B25')
         jeri_todo = ''
-        
+
         for count, line in enumerate(jeri_range):
             # print(this_staff_data[number])
             if jeri_range[count][0].value == '':
                 jeri_todo = jeri_todo + jeri_range[count][1].value + '\n'
         if jeri_todo != '':
-            final_jeri_todo = final_jeri_todo + staff['Staff Name'] + '\n \n' + jeri_todo + '\n\n'
+            final_jeri_todo = final_jeri_todo + \
+                staff['Staff Name'] + '\n \n' + jeri_todo + '\n\n'
 
         # begin pierrette email notifications
         pierrette_range = this_staff_sheet.range('A30:B31')
         pierrette_todo = ''
-        
+
         for count, line in enumerate(pierrette_range):
             # print(this_staff_data[number])
             if pierrette_range[count][0].value == '':
-                pierrette_todo = pierrette_todo + pierrette_range[count][1].value + '\n'
+                pierrette_todo = pierrette_todo + \
+                    pierrette_range[count][1].value + '\n'
         if pierrette_todo != '':
-            final_pierrette_todo = final_pierrette_todo + staff['Staff Name'] + '\n \n' + pierrette_todo + '\n\n'
-
+            final_pierrette_todo = final_pierrette_todo + \
+                staff['Staff Name'] + '\n \n' + pierrette_todo + '\n\n'
 
         # begin michelle email notifications
         michelle_range = this_staff_sheet.range('A36:B42')
         michelle_todo = ''
-        
+
         for count, line in enumerate(michelle_range):
             # print(this_staff_data[number])
             if michelle_range[count][0].value == '':
-                michelle_todo = michelle_todo + michelle_range[count][1].value + '\n'
+                michelle_todo = michelle_todo + \
+                    michelle_range[count][1].value + '\n'
         if michelle_todo != '':
-            final_michelle_todo = final_michelle_todo + staff['Staff Name'] + '\n \n' + michelle_todo + '\n\n'
+            final_michelle_todo = final_michelle_todo + \
+                staff['Staff Name'] + '\n \n' + michelle_todo + '\n\n'
 
 
 contents = 'This is your friendly weekly reminder of things to do for new staff members. \n \n \n'
@@ -113,33 +117,38 @@ html = '<a href="https://docs.google.com/spreadsheets/d/1KWLOYV7wQjEaD0A107gZliv
 
 # bonnie emails
 if final_bonnie_todo != '':
-    yag.send(['bonnie.moulton@mvsdschools.org','russell.gregory@mvsdschools.org'], 'New Staff Weekly Reminder', [contents, final_bonnie_todo, html])
+    yag.send(['bonnie.moulton@mvsdschools.org', 'russell.gregory@mvsdschools.org'],
+             'New Staff Weekly Reminder', [contents, final_bonnie_todo, html])
 else:
-    yag.send('bonnie.moulton@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+    yag.send('bonnie.moulton@mvsdschools.org',
+             'New Staff Weekly Reminder', [contents, contents2, html])
 print('bonnie email sent')
 
 # jeri emails
 if final_jeri_todo != '':
-    yag.send('Jeri.Patterson@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_jeri_todo, html])
+    yag.send('Jeri.Patterson@mvsdschools.org',
+             'New Staff Weekly Reminder', [contents, final_jeri_todo, html])
 else:
-    yag.send('Jeri.Patterson@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+    yag.send('Jeri.Patterson@mvsdschools.org',
+             'New Staff Weekly Reminder', [contents, contents2, html])
 print('jeri email sent')
 
 # pierrette emails
 if final_pierrette_todo != '':
-    yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_pierrette_todo, html])
+    yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [
+             contents, final_pierrette_todo, html])
 else:
-    yag.send('Pierrette.Bouchard@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+    yag.send('Pierrette.Bouchard@mvsdschools.org',
+             'New Staff Weekly Reminder', [contents, contents2, html])
 print('pierrette email sent')
 
 # michelle emails
 if final_michelle_todo != '':
-    yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [contents, final_michelle_todo, html])
+    yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [
+             contents, final_michelle_todo, html])
 else:
-    yag.send('Michelle.Stanley@mvsdschools.org', 'New Staff Weekly Reminder', [contents, contents2, html])
+    yag.send('Michelle.Stanley@mvsdschools.org',
+             'New Staff Weekly Reminder', [contents, contents2, html])
 print('michelle email sent')
-
-
-
 
 print('\n\nfinished')
