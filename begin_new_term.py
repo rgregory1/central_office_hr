@@ -112,7 +112,7 @@ else:
                 new_staff_row_number = count + 1
                 break
         start_range = 'A' + str(new_staff_row_number)
-        end_range = 'D' + str(new_staff_row_number)
+        end_range = 'E' + str(new_staff_row_number)
         new_staff_line = master_list.range(start_range + ':' + end_range)
 
         # populate first emtpy row with formulas from staff record sheet
@@ -120,6 +120,7 @@ else:
         new_staff_line[0][1].formula = "'" + staff_name + "'!C8"
         new_staff_line[0][2].formula = "'" + staff_name + "'!D12"
         new_staff_line[0][3].formula = "'" + staff_name + "'!D19"
+        new_staff_line[0][4].formula = "'" + staff_name + "'!D23"
 
         # mark new staff member as processed with X in column I
         mark_as_finished_cell = 'J' + str(staff['row_number'])
@@ -134,6 +135,7 @@ else:
         yag.send(['russell.gregory@mvsdschools.org',
                   'bonnie.moulton@mvsdschools.org',
                   'Michelle.Stanley@mvsdschools.org',
+                  'Jeri.Patterson@mvsdschools.org',
                   ],
                  'New Termination',
                  [contents, html])
