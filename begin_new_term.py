@@ -5,7 +5,7 @@ import yagmail
 
 print('\n' * 10)
 
-is_new_staff = False
+is_new_term = False
 
 # setup credentials for sending email
 gmail_user = credentials.gmail_user
@@ -16,18 +16,18 @@ yag = yagmail.SMTP(gmail_user, gmail_password)
 temp_timestamp = str(datetime.datetime.now())
 print(temp_timestamp)
 print('\n')
-print('checking new staff form entries')
+print('checking new termination form entries')
 print('\n')
 
 
 def check_for_new_staff():
-    print('Starting check of new staff form...')
+    print('Starting check of new termination form...')
 
-    # open up google sheet to see if new staff have been added
+    # open up google sheet to see if new termination have been added
     gc = pygsheets.authorize(outh_file='client_secret.json')
     initial_form_wb = gc.open_by_key(
-        '1lRbvNLr4EJQ8pQco7MRooxF4ompKEAdCFehlaZRCYOY')
-    initial_form_sheet = initial_form_wb.worksheet_by_title("NewStaff")
+        '1b3ktqopatkcrdLBbgAl3yTfRVKdvr_0yWAA_yNcNkaI')
+    initial_form_sheet = initial_form_wb.worksheet_by_title("NewTermination")
 
     # download all data from sheet as cell_matrix
     cell_matrix = initial_form_sheet.get_all_values(returnas='matrix')
@@ -41,7 +41,7 @@ def check_for_new_staff():
 
     # put cell_matrix list of lists into a list of dictionaries
     for count, row in enumerate(cell_matrix):
-        if row[8] == '':
+        if row[9] == '':
             line_dict = dict(zip(dict_key_list, row))
             # add count so I can add x to appropriate row later
             line_dict['row_number'] = count + 1
@@ -52,31 +52,31 @@ def check_for_new_staff():
     return worksheet_data, initial_form_sheet
 
 
-# check for new staff
+# check for new termination
 worksheet_data, initial_form_sheet = check_for_new_staff()
 
-# if new staff
+# if new termination
 # empty list
 if len(worksheet_data) == 0:
     # empty list
-    print("No new staff found")
+    print("No new terminations found")
 
 else:
     # list contains items
-    print("New staff found")
-    is_new_staff = True
+    print("New termination found")
+    is_new_term = True
 
     # print(worksheet_data)
 
     # get blank copy of staff record sheet
     gc = pygsheets.authorize(outh_file='client_secret.json')
     fresh_copy_wkb = gc.open_by_key(
-        '1hdn-UkFtsUCGGIJnaUSBExOFlOs8YiPG9Ql47FG-4z4')
+        '1pI4O0XZWHU2Jd7zL30dAtYhmCIe2GpqNf-DYT-326BU')
     fresh_copy_sheet = fresh_copy_wkb.worksheet_by_title("Original")
 
-    # open CO New Staff Process google sheet
+    # open CO New Termination Process google sheet
     staff_process_wkb = gc.open_by_key(
-        '1KWLOYV7wQjEaD0A107gZlivZ3sr8OeOcDP3OjVOSX6E')
+        '1CT2Xv3sOfQbi7HvLVwZWDKzY380QowGoOu4Cnx44MFo')
     master_list = staff_process_wkb.worksheet_by_title('MasterList')
 
     for staff in worksheet_data:
@@ -92,12 +92,13 @@ else:
         individual_record_sheet.index = 1
 
         # add new staff members basic info to record sheet
-        basic_info = individual_record_sheet.range('C2:C6')
+        basic_info = individual_record_sheet.range('C2:C7')
         basic_info[0][0].value = staff_name
         basic_info[1][0].value = staff['School Location']
         basic_info[2][0].value = staff['Category']
         basic_info[3][0].value = staff['Position']
-        basic_info[4][0].value = staff['Effective Date']
+        basic_info[4][0].value = staff['Last Day of Employment']
+        basic_info[5][0].value = staff['Retirement']
 
         # add new staff member to MasterList sheet
 
@@ -111,41 +112,36 @@ else:
                 new_staff_row_number = count + 1
                 break
         start_range = 'A' + str(new_staff_row_number)
-        end_range = 'F' + str(new_staff_row_number)
+        end_range = 'D' + str(new_staff_row_number)
         new_staff_line = master_list.range(start_range + ':' + end_range)
 
         # populate first emtpy row with formulas from staff record sheet
         new_staff_line[0][0].value = staff_name
-        new_staff_line[0][1].formula = "'" + staff_name + "'!C7"
-        new_staff_line[0][2].formula = "'" + staff_name + "'!D11"
-        new_staff_line[0][3].formula = "'" + staff_name + "'!D20"
-        new_staff_line[0][4].formula = "'" + staff_name + "'!D29"
-        new_staff_line[0][5].formula = "'" + staff_name + "'!D35"
+        new_staff_line[0][1].formula = "'" + staff_name + "'!C8"
+        new_staff_line[0][2].formula = "'" + staff_name + "'!D12"
+        new_staff_line[0][3].formula = "'" + staff_name + "'!D19"
 
         # mark new staff member as processed with X in column I
-        mark_as_finished_cell = 'I' + str(staff['row_number'])
+        mark_as_finished_cell = 'J' + str(staff['row_number'])
         initial_form_sheet.update_value(mark_as_finished_cell, 'X')
 
         print('finished with spreadsheet setup')
 
         # begin email notifications
-        contents = 'A new staff member, <b>' + staff_name + \
-            '</b>, was added to the CO New Staff Process spreadsheet, go and check it out. \n\n'
-        html = '<a href="https://docs.google.com/spreadsheets/d/1KWLOYV7wQjEaD0A107gZlivZ3sr8OeOcDP3OjVOSX6E/edit#gid=0">New Staff Process spreadsheet</a>'
+        contents = 'A new staff termination, <b>' + staff_name + \
+            '</b>, was added to the CO New Staff Termination spreadsheet, go and check it out. \n\n'
+        html = '<a href="https://docs.google.com/spreadsheets/d/1CT2Xv3sOfQbi7HvLVwZWDKzY380QowGoOu4Cnx44MFo/edit#gid=2040843378">New Staff Termination spreadsheet</a>'
         yag.send(['russell.gregory@mvsdschools.org',
                   'bonnie.moulton@mvsdschools.org',
-                  'Jeri.Patterson@mvsdschools.org',
-                  'Pierrette.Bouchard@mvsdschools.org',
                   'Michelle.Stanley@mvsdschools.org',
-                  'robert.gervais@mvsdschools.org'
                   ],
-                 'New Employee',
+                 'New Termination',
                  [contents, html])
         print(f'sent notificaion email for {staff_name}\n\n')
 
 
-if is_new_staff == False:
-    print('program comlpete, no new staff')
+if is_new_term == False:
+    print('program comlpete, no new terminations')
 else:
     end_timestamp = str(datetime.datetime.now())
     print(f'program complete at {end_timestamp}')
